@@ -3,22 +3,50 @@ import mysql.connector
 from mysql.connector import Error
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Change this to a random secret key
+app.secret_key = 'your-secret-key-here'
 
-# Connect to MySQL
+# RDS MySQL details
+rds_host = "database-1.c58kc82qa65f.ap-south-1.rds.amazonaws.com"  # Replace with your RDS endpoint
+rds_user = "admin"                             # RDS username
+rds_password = "Ujwal9494"                     # RDS password
+database = "database-1"
+
 try:
+    # Step 1: Connect to RDS without specifying a database
     db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="un_trade"
+        host=rds_host,
+        user=rds_user,
+        password=rds_password
     )
     cursor = db.cursor()
-    print("✅ MySQL connection successful!")
-except Error as e:
-    print("❌ MySQL connection failed:", e)
+    print("✅ Connected to RDS MySQL instance successfully!")
 
-# Routes
+    # Step 2: Create database if not exists
+    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database}")
+    print(f"✅ Database '{database}' is ready!")
+
+    # Step 3: Connect to the newly created database
+    db.database = database
+    print(f"✅ Connected to database '{database}' successfully!")
+
+    # Step 4: Create table if not exists
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS contact_queries (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            phone VARCHAR(50),
+            message TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    print("✅ Table 'contact_queries' is ready!")
+
+except Error as e:
+    print("❌ RDS connection or setup failed:", e)
+
+
+# Flask routes
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -35,7 +63,6 @@ def submit():
         phone = request.form.get('phone')
         message = request.form.get('message')
 
-        # Basic validation
         if not name or not email or not message:
             flash('Please fill in all required fields.', 'error')
             return redirect("/")
