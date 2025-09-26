@@ -1,21 +1,23 @@
-name: Deploy static content to Pages
+name: Deploy Static Files
 
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
-
-permissions:
-  contents: write
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Upload static files as artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: app-layer
+
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/deploy-pages@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./static
