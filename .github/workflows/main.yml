@@ -9,21 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout repository
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # 2. Setup GitHub Pages
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
+      # 2. Setup GitHub Pages
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v4
 
-    # 3. Upload your static files as artifact
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: ./static
+      # 3. Upload the static files from the 'static' folder
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./static  # Make sure all your HTML, CSS, JS files are inside this folder
 
-    # 4. Deploy to GitHub Pages
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+      # 4. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
