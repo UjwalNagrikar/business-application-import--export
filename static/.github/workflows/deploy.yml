@@ -26,11 +26,14 @@ jobs:
         ls -la
         echo "Looking for index.html:"
         find . -name "index.html" -type f
-        echo "Checking if index.html exists:"
         if [ -f "index.html" ]; then
           echo "✅ index.html found!"
+          echo "File content (first 10 lines):"
+          head -10 index.html
         else
           echo "❌ index.html NOT found!"
+          echo "Available files:"
+          ls -la
           exit 1
         fi
       
@@ -38,10 +41,10 @@ jobs:
       uses: actions/configure-pages@v4
       
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v3.0.0
       with:
         path: ./
           
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v4.0.0
