@@ -533,11 +533,4 @@ df -h
 - EC2 AMI snapshots
 - VPC configuration documentation
 
----
 
-## Support and Contact
-
-For technical support or questions about this project:
-- **Email**: ujjwalnagrikar@gmail.com
-- **Phone**: +91 84463 62075
-- **Location**: Nagpur, Maharashtra, India
