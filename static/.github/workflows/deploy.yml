@@ -5,46 +5,40 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      
-    - name: Debug - List files
-      run: |
-        echo "Current directory structure:"
-        ls -la
-        echo "Looking for index.html:"
-        find . -name "index.html" -type f
-        if [ -f "index.html" ]; then
-          echo "✅ index.html found!"
-          echo "File content (first 10 lines):"
-          head -10 index.html
-        else
-          echo "❌ index.html NOT found!"
-          echo "Available files:"
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Debug - List files
+        run: |
+          echo "Current directory structure:"
           ls -la
-          exit 1
-        fi
-      
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-      
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3.0.0
-      with:
-        path: ./
+          if [ -f "index.html" ]; then
+            echo "✅ index.html found!"
+          else
+            echo "❌ index.html NOT found! Available files:"
+            ls -la
+            exit 1
+          fi
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '.'
           
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4.0.0
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
