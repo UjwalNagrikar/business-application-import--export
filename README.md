@@ -541,7 +541,3 @@ For technical support or questions about this project:
 - **Email**: ujjwalnagrikar@gmail.com
 - **Phone**: +91 84463 62075
 - **Location**: Nagpur, Maharashtra, India
-
-## License
-
-This project is proprietary software for UN Enterprises. All rights reserved.
