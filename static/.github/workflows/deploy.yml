@@ -17,16 +17,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       
+    - name: Debug - List files
+      run: |
+        echo "Current directory structure:"
+        ls -la
+        echo "Looking for index.html:"
+        find . -name "index.html" -type f
+      
     - name: Setup Pages
       uses: actions/configure-pages@v4
       
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        # Upload the entire repository (or specify your HTML file directory)
         path: ./
-        # Alternative: if your files are in a specific folder like 'src' or 'public'
-        # path: ./public
 
   deploy:
     environment:
