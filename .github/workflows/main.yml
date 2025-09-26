@@ -4,6 +4,11 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  pages: write           # Required to deploy Pages
+  id-token: write        # Required to get ACTIONS_ID_TOKEN_REQUEST_URL
+  contents: read         # Required to checkout repository
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -17,11 +22,11 @@ jobs:
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
-      # 3. Upload the static files from the 'static' folder
+      # 3. Upload static files artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./static  # Make sure all your HTML, CSS, JS files are inside this folder
+          path: ./static   # Make sure your index.html is inside static/
 
       # 4. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
