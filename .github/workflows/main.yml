@@ -7,24 +7,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    
+
     steps:
+    # 1. Checkout repository
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 2. Setup GitHub Pages
     - name: Setup Pages
       uses: actions/configure-pages@v4
 
+    # 3. Upload your static files as artifact
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: .
+        path: ./static
 
+    # 4. Deploy to GitHub Pages
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
