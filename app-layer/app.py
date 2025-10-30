@@ -1,35 +1,35 @@
 from flask import Flask, render_template, request, redirect, flash
 import mysql.connector
 from mysql.connector import Error
+import os 
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
 
-# RDS MySQL details
-rds_host = "database-1.c58kc82qa65f.ap-south-1.rds.amazonaws.com"  # Replace with your RDS endpoint
-rds_user = "admin"                             # RDS username
-rds_password = "Ujwal9494"                     # RDS password
-database = "database-1"
+db_host = os.getenv("DB_HOST", "mysql")
+db_user = os.getenv("DB_USER", "root")
+db_password = os.getenv("DB_PASSWORD", "rootpassword")
+db_name = os.getenv("DB_NAME", "mywebsite")
 
 try:
-    # Step 1: Connect to RDS without specifying a database
+    # Connect to MySQL server
     db = mysql.connector.connect(
-        host=rds_host,
-        user=rds_user,
-        password=rds_password
+        host=db_host,
+        user=db_user,
+        password=db_password
     )
     cursor = db.cursor()
-    print("✅ Connected to RDS MySQL instance successfully!")
+    print("✅ Connected to MySQL container successfully!")
 
-    # Step 2: Create database if not exists
-    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database}")
-    print(f"✅ Database '{database}' is ready!")
+    # Create database if not exists
+    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
+    print(f"✅ Database '{db_name}' is ready!")
 
-    # Step 3: Connect to the newly created database
-    db.database = database
-    print(f"✅ Connected to database '{database}' successfully!")
+    # Switch to database
+    db.database = db_name
+    print(f"✅ Connected to DB '{db_name}'")
 
-    # Step 4: Create table if not exists
+    # Create table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS contact_queries (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -40,11 +40,10 @@ try:
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
-    print("✅ Table 'contact_queries' is ready!")
+    print("✅ Table 'contact_queries' ready!")
 
 except Error as e:
-    print("❌ RDS connection or setup failed:", e)
-
+    print("❌ MySQL connection or setup failed:", e)
 
 # Flask routes
 @app.route('/')

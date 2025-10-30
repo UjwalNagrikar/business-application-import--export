@@ -1,25 +1,58 @@
-version: '3.8'
+version: "3.8"
+
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
-    container_name: flask-backend
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mywebsite
     ports:
-      - "5000:5000"
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
     networks:
       - app-network
+
+  backend:
+    build:
+      context: ./app-layer
+      dockerfile: Dockerfile
+    container_name: flask-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_NAME: mywebsite
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    volumes:
+      - ./app-layer:/app
 
   frontend:
     build:
       context: ./static
-      dockerfile: Dockerfile.static
+      dockerfile: Dockerfile
     container_name: nginx-frontend
+    restart: always
     ports:
       - "80:80"
+    depends_on:
+      - backend
     networks:
       - app-network
+    volumes:
+      - ./static:/usr/share/nginx/html:ro
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  mysql_data:
