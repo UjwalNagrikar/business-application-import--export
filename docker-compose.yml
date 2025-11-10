@@ -8,12 +8,20 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: mywebsite
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
       - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    command: --default-authentication-plugin=mysql_native_password
 
   backend:
     build:
@@ -28,12 +36,22 @@ services:
       DB_USER: root
       DB_PASSWORD: rootpassword
       DB_NAME: mywebsite
+      FLASK_ENV: development
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - app-network
     volumes:
       - ./app-layer:/app
+      - ./Template:/app/Template
+      - ./static:/app/static
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   frontend:
     build:
@@ -56,3 +74,4 @@ networks:
 
 volumes:
   mysql_data:
+    driver: local
