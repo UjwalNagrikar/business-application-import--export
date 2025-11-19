@@ -80,6 +80,7 @@ nav {
     font-weight: 700;
     background: linear-gradient(135deg, #667eea, #764ba2);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: glow 2s ease-in-out infinite;
 }
@@ -1157,5 +1158,122 @@ footer {
     .product-card:hover,
     .benefit-card:hover {
         transform: none;
+    }
+}
+
+/* ==========================================
+   FLASH MESSAGES / NOTIFICATIONS
+   ========================================== */
+.flash-messages-container {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 400px;
+    width: 90%;
+}
+
+.flash-message {
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+    backdrop-filter: blur(10px);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.flash-message.success {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.95));
+    color: white;
+    border-left: 5px solid #059669;
+}
+
+.flash-message.error {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(220, 38, 38, 0.95));
+    color: white;
+    border-left: 5px solid #dc2626;
+}
+
+.flash-message.info {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.95), rgba(37, 99, 235, 0.95));
+    color: white;
+    border-left: 5px solid #2563eb;
+}
+
+.flash-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.flash-content {
+    flex: 1;
+}
+
+.flash-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.flash-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(500px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+}
+
+/* Mobile responsiveness for flash messages */
+@media (max-width: 768px) {
+    .flash-messages-container {
+        top: 80px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        width: auto;
+    }
+    
+    .flash-message {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .flash-icon {
+        font-size: 1.5rem;
     }
 }

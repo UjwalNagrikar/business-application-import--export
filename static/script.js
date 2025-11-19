@@ -215,6 +215,65 @@ function initPageLoad() {
     });
 }
 
+// Flash Messages System
+function showFlashMessage(message, type = 'success') {
+    console.log('showFlashMessage called:', message, type);
+    const container = document.getElementById('flashMessages');
+    if (!container) {
+        console.error('Flash messages container not found!');
+        return;
+    }
+    console.log('Container found:', container);
+    
+    const flashDiv = document.createElement('div');
+    flashDiv.className = `flash-message ${type}`;
+    
+    // Choose icon based on type
+    let icon = '✓';
+    if (type === 'error') icon = '✕';
+    if (type === 'info') icon = 'ℹ';
+    
+    flashDiv.innerHTML = `
+        <div class="flash-icon">${icon}</div>
+        <div class="flash-content">${message}</div>
+        <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+    `;
+    
+    container.appendChild(flashDiv);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (flashDiv.parentElement) {
+            flashDiv.remove();
+        }
+    }, 5000);
+}
+
+// Check for flash messages from URL parameters
+function checkFlashMessages() {
+    console.log('Checking for flash messages...');
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const error = urlParams.get('error');
+    
+    console.log('Success param:', success);
+    console.log('Error param:', error);
+    
+    if (success) {
+        console.log('Showing success message:', decodeURIComponent(success));
+        showFlashMessage(decodeURIComponent(success), 'success');
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    if (error) {
+        console.log('Showing error message:', decodeURIComponent(error));
+        showFlashMessage(decodeURIComponent(error), 'error');
+        // Clean URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+}
+
 // Initialize all functions
 function init() {
     createParticles();
@@ -226,6 +285,7 @@ function init() {
     initClickOutside();
     initParallax();
     initPageLoad();
+    checkFlashMessages();
 }
 
 // Run initialization when DOM is ready

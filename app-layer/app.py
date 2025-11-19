@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, flash, url_for, send_from_directory
+from urllib.parse import quote
 import mysql.connector
 from mysql.connector import Error
 import os
 import time
 
 app = Flask(__name__, static_folder='../static', template_folder='../Template')
-app.secret_key = os.getenv('SECRET_KEY', 'your-secret-key-here')
+app.secret_key = 'my-test-secret-key-12345'
 
 # Database Configuration for Docker
 db_host = os.getenv("DB_HOST", "mysql")
@@ -148,8 +149,7 @@ def submit():
     """Handle contact form submission"""
     if not db or not db.is_connected():
         print("❌ Database not connected")
-        flash('Service temporarily unavailable. Please try again later.', 'error')
-        return redirect('/')
+        return redirect('/?error=' + quote('Service temporarily unavailable. Please try again later.'))
     
     try:
         # Get form data
@@ -166,13 +166,11 @@ def submit():
         # Validation
         if not name or not email or not message:
             print("❌ Validation failed: Missing required fields")
-            flash('Please fill in all required fields.', 'error')
-            return redirect('/')
+            return redirect('/?error=' + quote('Please fill in all required fields.'))
         
         if '@' not in email or '.' not in email:
             print("❌ Validation failed: Invalid email")
-            flash('Please enter a valid email address.', 'error')
-            return redirect('/')
+            return redirect('/?error=' + quote('Please enter a valid email address.'))
         
         # Insert into database
         sql = "INSERT INTO contact_queries (name, email, phone, message) VALUES (%s, %s, %s, %s)"
@@ -182,18 +180,15 @@ def submit():
         db.commit()
         
         print(f"✅ Submission saved successfully! ID: {cursor.lastrowid}")
-        flash('Thank you for your message! We will get back to you soon.', 'success')
-        return redirect('/')
+        return redirect('/?success=' + quote('🎉 Thank you for your message! We will get back to you soon.'))
         
     except Error as e:
         print(f"❌ Database error: {e}")
         db.rollback()
-        flash('Error submitting form. Please try again.', 'error')
-        return redirect('/')
+        return redirect('/?error=' + quote('Error submitting form. Please try again.'))
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
-        flash('An unexpected error occurred. Please try again.', 'error')
-        return redirect('/')
+        return redirect('/?error=' + quote('An unexpected error occurred. Please try again.'))
 
 @app.route('/admin')
 def admin():
