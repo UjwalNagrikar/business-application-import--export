@@ -1,15 +1,15 @@
-# UN Enterprises -  Project Documentation
+# Transolux  Enterprises -  Project Documentation
 
 ## Executive Summary
 
-**Project Name:** UN Enterprises Web Application  
+**Project Name:** Transolux  Enterprises Web Application  
 **Project Type:** Full-Stack Web Application with Cloud Infrastructure  
 **Industry:** International Import-Export Trade  
 **Status:** Production-Rea_dy  
 **Version:** 1.0.0  
 
 ### Overview
-UN Enterprises is a modern, responsive web application designed for a global import-export business. The application provides a professional online presence with contact form functionality, admin dashboard, and robust database integration. Built with Flask backend and deployed on AWS infrastructure using containerization and Infrastructure as Code (IaC) principles.
+Transolux  Enterprises is a modern, responsive web application designed for a global import-export business. The application provides a professional online presence with contact form functionality, admin dashboard, and robust database integration. Built with Flask backend and deployed on AWS infrastructure using containerization and Infrastructure as Code (IaC) principles.
 
 ### Key Achievements
 - ✅ Full-stack web application with Flask backend
