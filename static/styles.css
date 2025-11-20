@@ -1277,3 +1277,35 @@ footer {
         font-size: 1.5rem;
     }
 }
+
+.about {
+    padding: 80px 20px;
+    background: #fff;
+}
+
+.about-container {
+    max-width: 1100px;   /* Controls width */
+    margin: 0 auto;      /* Centers the entire block */
+    text-align: center;  /* Centers inside text */
+}
+
+.about-content {
+    display: flex;
+    justify-content: center; /* Centers the block horizontally */
+}
+
+.about-text {
+    max-width: 750px;   /* Prevents text from stretching too wide */
+}
+/* Strong, specific selector + vendor prefixed property + !important */
+.contact-form textarea,
+textarea {
+  -webkit-resize: none;   /* Safari/Chrome */
+  -moz-resize: none;      /* Firefox */
+  resize: none !important;/* strongest */
+  box-sizing: border-box; /* ensure width includes padding/border */
+  width: 100% !important;
+  height: 140px !important;
+  max-height: 140px !important;
+  overflow-y: auto;       /* show scrollbar when content overflows */
+}
